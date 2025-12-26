@@ -21,7 +21,14 @@ git clone https://github.com/dhanush-raja-a/Leetcode-dashboard.git
 cd Leetcode-dashboard
 ```
 
-### 2. Run the Application
+### 2. Install Dependencies
+Download all necessary libraries and dependencies:
+
+```bash
+mvn clean install
+```
+
+### 3. Run the Application
 You can run the application using Maven:
 
 ```bash
