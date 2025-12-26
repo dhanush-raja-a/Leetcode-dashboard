@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>LeetCode Stats</h1>
+
+        <div class="search-box">
+            <form action="/" method="get">
+                <input type="text" name="username" placeholder="Enter LeetCode username..." th:value="${username}"
+                    required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div th:if="${stats.status == 'error'}" class="error-message">
+            <p th:text="${stats.message}">Error message</p>
+        </div>
+
+        <div th:if="${stats.status != 'error'}" class="stats-grid">
+            <div class="card total">
+                <h3>Total Solved</h3>
+                <div class="count" th:text="${stats.totalSolved}">0</div>
+            </div>
+            <div class="card easy">
+                <h3>Easy</h3>
+                <div class="count" th:text="${stats.easySolved}">0</div>
+            </div>
+            <div class="card medium">
+                <h3>Medium</h3>
+                <div class="count" th:text="${stats.mediumSolved}">0</div>
+            </div>
+            <div class="card hard">
+                <h3>Hard</h3>
+                <div class="count" th:text="${stats.hardSolved}">0</div>
+            </div>
+        </div>
+
+        <div th:if="${stats.status != 'error'}" class="stats-section">
+            <h2>Languages Used</h2>
+            <div class="languages-grid">
+                <div class="language-card" th:each="lang : ${stats.languageStats}">
+                    <h3 th:text="${lang.languageName}">Java</h3>
+                    <div class="count" th:text="${lang.problemsSolved}">10</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"
+                            th:style="'width: ' + (${lang.problemsSolved} * 100.0 / ${stats.totalSolved}) + '%'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
