@@ -31,19 +31,25 @@
         <div th:if="${stats.status != 'error'}" class="stats-grid">
             <div class="card total">
                 <h3>Total Solved</h3>
-                <div class="count" th:text="${stats.totalSolved}">0</div>
+                <div class="count" th:text="${stats.totalSolved} + ' / ' + ${stats.totalTarget}">0 / 500</div>
+                <div style="font-size: 0.8rem; opacity: 0.7;" th:text="${stats.totalPercentage} + '% Complete'">20%
+                </div>
             </div>
             <div class="card easy">
                 <h3>Easy</h3>
-                <div class="count" th:text="${stats.easySolved}">0</div>
+                <div class="count" th:text="${stats.easySolved} + ' / ' + ${stats.easyTarget}">0 / 200</div>
+                <div style="font-size: 0.8rem; opacity: 0.7;" th:text="${stats.easyPercentage} + '% Complete'">40%</div>
             </div>
             <div class="card medium">
                 <h3>Medium</h3>
-                <div class="count" th:text="${stats.mediumSolved}">0</div>
+                <div class="count" th:text="${stats.mediumSolved} + ' / ' + ${stats.mediumTarget}">0 / 200</div>
+                <div style="font-size: 0.8rem; opacity: 0.7;" th:text="${stats.mediumPercentage} + '% Complete'">10%
+                </div>
             </div>
             <div class="card hard">
                 <h3>Hard</h3>
-                <div class="count" th:text="${stats.hardSolved}">0</div>
+                <div class="count" th:text="${stats.hardSolved} + ' / ' + ${stats.hardTarget}">0 / 100</div>
+                <div style="font-size: 0.8rem; opacity: 0.7;" th:text="${stats.hardPercentage} + '% Complete'">10%</div>
             </div>
         </div>
 
@@ -51,16 +57,54 @@
             <h2>Languages Used</h2>
             <div class="languages-grid">
                 <div class="language-card" th:each="lang : ${stats.languageStats}">
-                    <h3 th:text="${lang.languageName}">Java</h3>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div class="count" th:text="${lang.problemsSolved}">10</div>
-                        <div style="font-size: 0.9rem; opacity: 0.7;" th:text="'Target: ' + ${lang.target}">Target: 50
+                    <h3 th:text="${lang.languageName}" style="margin-bottom: 0.5rem;">Java</h3>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                            <span>Total</span>
+                            <span th:text="${lang.problemsSolved} + '/' + ${lang.target}">0/20</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px;">
+                            <div class="progress-fill"
+                                th:style="'width: ' + ${lang.percentage} + '%; background: #4a90e2;'"></div>
                         </div>
                     </div>
-                    <div style="font-size: 0.8rem; margin-bottom: 5px; opacity: 0.8;"
-                        th:text="${lang.percentage} + '% Complete'">20%</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" th:style="'width: ' + ${lang.percentage} + '%'"></div>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                            <span>Easy</span>
+                            <span th:text="${lang.easySolved} + '/' + ${lang.easyTarget}">0/10</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px;">
+                            <div class="progress-fill"
+                                th:style="'width: ' + ${lang.easyPercentage} + '%; background: #00b8a3;'"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                            <span>Medium</span>
+                            <span th:text="${lang.mediumSolved} + '/' + ${lang.mediumTarget}">0/10</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px;">
+                            <div class="progress-fill"
+                                th:style="'width: ' + ${lang.mediumPercentage} + '%; background: #ffc01e;'"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                            <span>Hard</span>
+                            <span th:text="${lang.hardSolved} + '/' + ${lang.hardTarget}">0/5</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px;">
+                            <div class="progress-fill"
+                                th:style="'width: ' + ${lang.hardPercentage} + '%; background: #ff375f;'"></div>
+                        </div>
                     </div>
                 </div>
             </div>

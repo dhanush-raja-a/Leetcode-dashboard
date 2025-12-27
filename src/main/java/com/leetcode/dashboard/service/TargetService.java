@@ -27,12 +27,23 @@ public class TargetService {
             targets.put("Python", 30);
             targets.put("Python3", 30);
             targets.put("JavaScript", 30);
+            
+            // Difficulty Targets
+            targets.put("Target_Total", 500);
+            targets.put("Target_Easy", 200);
+            targets.put("Target_Medium", 200);
+            targets.put("Target_Hard", 100);
+            
             saveTargets();
         }
     }
 
-    public int getTarget(String language) {
-        return targets.getOrDefault(language, 20); // Default 20 if not set
+    public int getTarget(String key) {
+        return targets.getOrDefault(key, 0); // Default 0 to distinguish unset
+    }
+    
+    public int getTarget(String key, int defaultValue) {
+        return targets.getOrDefault(key, defaultValue);
     }
 
     public Map<String, Integer> getAllTargets() {

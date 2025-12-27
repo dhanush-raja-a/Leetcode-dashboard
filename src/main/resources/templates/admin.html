@@ -14,6 +14,7 @@
             padding: 2rem;
             color: white;
         }
+
         .form-group {
             margin-bottom: 1rem;
             background: rgba(255, 255, 255, 0.05);
@@ -23,9 +24,11 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .form-group label {
             font-weight: 600;
         }
+
         .form-group input {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -34,6 +37,7 @@
             color: white;
             width: 100px;
         }
+
         .save-btn {
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             border: none;
@@ -46,11 +50,12 @@
             margin-top: 1rem;
             font-size: 1.1rem;
         }
+
         .back-link {
             display: block;
             margin-top: 1rem;
             text-align: center;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
         }
     </style>
@@ -60,16 +65,110 @@
     <div class="admin-container">
         <h1>Set Language Targets</h1>
         <p style="margin-bottom: 2rem; opacity: 0.8;">Define the target number of problems for each language.</p>
-        
+
         <form action="/admin/targets" method="post">
-            <div th:each="target : ${targets}" class="form-group">
-                <label th:text="${target.key}">Java</label>
-                <input type="number" th:name="${target.key}" th:value="${target.value}" required>
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                Difficulty Targets</h3>
+            <div class="form-group">
+                <label>Total Solved Target</label>
+                <input type="number" name="Target_Total"
+                    th:value="${targets['Target_Total'] != null ? targets['Target_Total'] : 500}" required>
             </div>
-            
+            <div class="form-group">
+                <label>Easy Target</label>
+                <input type="number" name="Target_Easy"
+                    th:value="${targets['Target_Easy'] != null ? targets['Target_Easy'] : 200}" required>
+            </div>
+            <div class="form-group">
+                <label>Medium Target</label>
+                <input type="number" name="Target_Medium"
+                    th:value="${targets['Target_Medium'] != null ? targets['Target_Medium'] : 200}" required>
+            </div>
+            <div class="form-group">
+                <label>Hard Target</label>
+                <input type="number" name="Target_Hard"
+                    th:value="${targets['Target_Hard'] != null ? targets['Target_Hard'] : 100}" required>
+            </div>
+
+            <h3
+                style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                Language Targets</h3>
+
+            <div class="lang-group"
+                style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                <h4 style="margin-bottom: 0.5rem;">Java</h4>
+                <div style="display: flex; gap: 1rem;">
+                    <div><label>Total</label><input type="number" name="Java"
+                            th:value="${targets['Java'] != null ? targets['Java'] : 20}" style="width: 70px;"></div>
+                    <div><label>Easy</label><input type="number" name="Java_Easy"
+                            th:value="${targets['Java_Easy'] != null ? targets['Java_Easy'] : 10}" style="width: 70px;">
+                    </div>
+                    <div><label>Med</label><input type="number" name="Java_Medium"
+                            th:value="${targets['Java_Medium'] != null ? targets['Java_Medium'] : 10}"
+                            style="width: 70px;"></div>
+                    <div><label>Hard</label><input type="number" name="Java_Hard"
+                            th:value="${targets['Java_Hard'] != null ? targets['Java_Hard'] : 5}" style="width: 70px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="lang-group"
+                style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                <h4 style="margin-bottom: 0.5rem;">C++</h4>
+                <div style="display: flex; gap: 1rem;">
+                    <div><label>Total</label><input type="number" name="C++"
+                            th:value="${targets['C++'] != null ? targets['C++'] : 50}" style="width: 70px;"></div>
+                    <div><label>Easy</label><input type="number" name="C++_Easy"
+                            th:value="${targets['C++_Easy'] != null ? targets['C++_Easy'] : 10}" style="width: 70px;">
+                    </div>
+                    <div><label>Med</label><input type="number" name="C++_Medium"
+                            th:value="${targets['C++_Medium'] != null ? targets['C++_Medium'] : 10}"
+                            style="width: 70px;"></div>
+                    <div><label>Hard</label><input type="number" name="C++_Hard"
+                            th:value="${targets['C++_Hard'] != null ? targets['C++_Hard'] : 5}" style="width: 70px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="lang-group"
+                style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                <h4 style="margin-bottom: 0.5rem;">Python</h4>
+                <div style="display: flex; gap: 1rem;">
+                    <div><label>Total</label><input type="number" name="Python"
+                            th:value="${targets['Python'] != null ? targets['Python'] : 30}" style="width: 70px;"></div>
+                    <div><label>Easy</label><input type="number" name="Python_Easy"
+                            th:value="${targets['Python_Easy'] != null ? targets['Python_Easy'] : 10}"
+                            style="width: 70px;"></div>
+                    <div><label>Med</label><input type="number" name="Python_Medium"
+                            th:value="${targets['Python_Medium'] != null ? targets['Python_Medium'] : 10}"
+                            style="width: 70px;"></div>
+                    <div><label>Hard</label><input type="number" name="Python_Hard"
+                            th:value="${targets['Python_Hard'] != null ? targets['Python_Hard'] : 5}"
+                            style="width: 70px;"></div>
+                </div>
+            </div>
+
+            <div class="lang-group"
+                style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                <h4 style="margin-bottom: 0.5rem;">MySQL</h4>
+                <div style="display: flex; gap: 1rem;">
+                    <div><label>Total</label><input type="number" name="MySQL"
+                            th:value="${targets['MySQL'] != null ? targets['MySQL'] : 20}" style="width: 70px;"></div>
+                    <div><label>Easy</label><input type="number" name="MySQL_Easy"
+                            th:value="${targets['MySQL_Easy'] != null ? targets['MySQL_Easy'] : 10}"
+                            style="width: 70px;"></div>
+                    <div><label>Med</label><input type="number" name="MySQL_Medium"
+                            th:value="${targets['MySQL_Medium'] != null ? targets['MySQL_Medium'] : 10}"
+                            style="width: 70px;"></div>
+                    <div><label>Hard</label><input type="number" name="MySQL_Hard"
+                            th:value="${targets['MySQL_Hard'] != null ? targets['MySQL_Hard'] : 5}"
+                            style="width: 70px;"></div>
+                </div>
+            </div>
+
             <button type="submit" class="save-btn">Save Targets</button>
         </form>
-        
+
         <a href="/" class="back-link">← Back to Dashboard</a>
     </div>
 </body>
