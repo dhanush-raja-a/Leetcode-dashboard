@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - LeetCode Targets</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-group label {
+            font-weight: 600;
+        }
+        .form-group input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem;
+            border-radius: 5px;
+            color: white;
+            width: 100px;
+        }
+        .save-btn {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            border: none;
+            padding: 1rem 2rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+        .back-link {
+            display: block;
+            margin-top: 1rem;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <h1>Set Language Targets</h1>
+        <p style="margin-bottom: 2rem; opacity: 0.8;">Define the target number of problems for each language.</p>
+        
+        <form action="/admin/targets" method="post">
+            <div th:each="target : ${targets}" class="form-group">
+                <label th:text="${target.key}">Java</label>
+                <input type="number" th:name="${target.key}" th:value="${target.value}" required>
+            </div>
+            
+            <button type="submit" class="save-btn">Save Targets</button>
+        </form>
+        
+        <a href="/" class="back-link">← Back to Dashboard</a>
+    </div>
+</body>
+
+</html>
