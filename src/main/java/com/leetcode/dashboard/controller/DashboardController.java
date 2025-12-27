@@ -1,7 +1,10 @@
 package com.leetcode.dashboard.controller;
 
+import com.leetcode.dashboard.model.LanguageProgress;
 import com.leetcode.dashboard.model.LeetCodeStats;
 import com.leetcode.dashboard.service.LeetCodeService;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,5 +30,12 @@ public class DashboardController {
     @ResponseBody
     public LeetCodeStats getStatsApi(@RequestParam(name = "username") String username) {
         return leetCodeService.getStats(username);
+    }
+
+    @GetMapping("/api/language-stats")
+    @ResponseBody
+    public List<LanguageProgress> getLanguageStatsApi(@RequestParam(name = "username") String username) {
+        LeetCodeStats stats = leetCodeService.getStats(username);
+        return stats.getLanguageStats();
     }
 }
