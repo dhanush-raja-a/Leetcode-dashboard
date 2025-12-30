@@ -1,6 +1,9 @@
 package com.leetcode.dashboard.service;
 
 import com.leetcode.dashboard.model.LeetCodeStats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
@@ -8,21 +11,29 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
 @Service
 public class LeetCodeService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private static final Logger logger = LoggerFactory.getLogger(LeetCodeService.class);
+    private final RestTemplate restTemplate;
     private static final String LEETCODE_API_URL = "https://leetcode.com/graphql";
     private final TargetService targetService;
 
-    public LeetCodeService(TargetService targetService) {
+    public LeetCodeService(TargetService targetService, RestTemplateBuilder restTemplateBuilder) {
         this.targetService = targetService;
+        this.restTemplate = restTemplateBuilder
+                .setConnectTimeout(Duration.ofSeconds(10))
+                .setReadTimeout(Duration.ofSeconds(10))
+                .build();
     }
+
 
 
     public LeetCodeStats getStats(String username) {
@@ -64,7 +75,10 @@ public class LeetCodeService {
         try {
             ResponseEntity<Map> response = restTemplate.postForEntity(LEETCODE_API_URL, entity, Map.class);
             return parseResponse(response.getBody(), username);
+
         } catch (Exception e) {
+            logger.error("Failed to fetch data for user: {}. Error: {}", username, e.getMessage());
+
             LeetCodeStats stats = new LeetCodeStats();
             stats.setStatus("error");
             stats.setMessage("Failed to fetch data for user: " + username + ". Error: " + e.getMessage());
@@ -244,6 +258,8 @@ public class LeetCodeService {
                 ResponseEntity<Map> response = restTemplate.postForEntity(LEETCODE_API_URL, entity, Map.class);
                 Map body = response.getBody();
                 if (body != null && body.containsKey("data")) {
+
+
                     Map data = (Map) body.get("data");
                     for (int j = 0; j < chunk.size(); j++) {
                         Map question = (Map) data.get("q" + j);

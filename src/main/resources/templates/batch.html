@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Batch Manager - LeetCode Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --border-color: #334155;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .student-item:last-child {
+            border-bottom: none;
+        }
+
+        .student-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #7dd3fc;
+        }
+
+        .btn:disabled {
+            background: #64748b;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background: #334155;
+            border-radius: 1rem;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: #94a3b8;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .range-picker {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 0.4rem;
+            border-radius: 0.3rem;
+            width: 60px;
+        }
+
+        .student-mgmt {
+            margin-bottom: 1.5rem;
+        }
+
+        .student-mgmt input {
+            width: 150px;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Batch Data Monitor</h1>
+
+    <div class="container">
+        <!-- Student List & Controls -->
+        <div class="card">
+            <h3>Students</h3>
+            <div id="student-list">
+                <!-- Dynamic Content -->
+            </div>
+
+            <div class="student-mgmt" style="margin-top: 2rem;">
+                <h4>Add/Change Student</h4>
+                <input type="text" id="new-student-name" placeholder="Username">
+                <button class="btn btn-small" onclick="addStudent()">Update List</button>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <a href="/" style="color: var(--accent-color); text-decoration: none;">&larr; Back to Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Data View -->
+        <div class="card">
+            <div class="range-picker">
+                <span>View Results for:</span>
+                <select id="view-username"
+                    style="background:#0f172a; color:white; border:1px solid #334155; padding:0.4rem; border-radius:0.3rem;">
+                    <!-- Dynamic -->
+                </select>
+                <span>Range:</span>
+                <input type="number" id="offset" value="0" min="0">
+                <span>to</span>
+                <input type="number" id="limit-val" value="10" min="1">
+                <button class="btn btn-small" onclick="fetchData()">Show</button>
+            </div>
+
+            <div id="batch-summary"
+                style="margin-top: 1rem; padding: 1rem; background: rgba(56, 189, 248, 0.1); border-radius: 0.5rem; display: none;">
+                <h4>Batch Summary</h4>
+                <div id="summary-content"></div>
+            </div>
+
+            <div id="data-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Time</th>
+                            <th>Solved</th>
+                            <th>Speed</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-body">
+                        <!-- Dynamic -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+        let activeStudent = "";
+
+        async function loadStudents() {
+            const res = await fetch('/api/batch/students');
+            students = await res.json();
+            renderStudents();
+            renderDropdown();
+        }
+
+        function renderStudents() {
+            const list = document.getElementById('student-list');
+            list.innerHTML = students.map(s => `
+                <div class="student-item">
+                    <div>
+                        <div class="student-name">${s}</div>
+                        <div id="progress-text-${s}" style="font-size: 0.8rem; color: #94a3b8;">Idle</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill-${s}"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-small" id="btn-start-${s}" onclick="startBatch('${s}')">Start 100</button>
+                </div>
+            `).join('');
+        }
+
+        function renderDropdown() {
+            const dropdown = document.getElementById('view-username');
+            dropdown.innerHTML = students.map(s => `<option value="${s}">${s}</option>`).join('');
+        }
+
+        async function startBatch(username) {
+            document.getElementById(`btn-start-${username}`).disabled = true;
+            await fetch(`/api/batch/start/${username}`, { method: 'POST' });
+            pollStatus(username);
+        }
+
+        async function pollStatus(username) {
+            const res = await fetch(`/api/batch/status/${username}`);
+            const data = await res.json();
+
+            const fill = document.getElementById(`progress-fill-${username}`);
+            const text = document.getElementById(`progress-text-${username}`);
+
+            fill.style.width = data.progress + '%';
+            text.innerText = `${data.status} (${data.progress}/100)`;
+
+            if (data.status === 'Completed' || data.status.startsWith('Failed')) {
+                document.getElementById(`btn-start-${username}`).disabled = false;
+                if (username === document.getElementById('view-username').value) {
+                    fetchData();
+                }
+            } else {
+                setTimeout(() => pollStatus(username), 2000);
+            }
+        }
+
+        async function fetchData() {
+            const username = document.getElementById('view-username').value;
+            const offset = document.getElementById('offset').value;
+            const limit = document.getElementById('limit-val').value;
+
+            const res = await fetch(`/api/batch/data?username=${username}&offset=${offset}&limit=${limit}`);
+            const records = await res.json();
+
+            // Calculate stats for the current view
+            if (records.length > 0) {
+                const totalDuration = records.reduce((sum, r) => sum + r.durationMs, 0);
+                const avgDuration = (totalDuration / records.length).toFixed(2);
+                const successCount = records.filter(r => r.status === 'success').length;
+
+                document.getElementById('batch-summary').style.display = 'block';
+                document.getElementById('summary-content').innerHTML = `
+                    <div style="display: flex; gap: 2rem;">
+                        <div><strong>Avg Speed:</strong> ${avgDuration}ms</div>
+                        <div><strong>Success Rate:</strong> ${(successCount / records.length * 100).toFixed(0)}%</div>
+                        <div><strong>Sample Size:</strong> ${records.length}</div>
+                    </div>
+                `;
+            }
+
+            const body = document.getElementById('data-body');
+
+            body.innerHTML = records.map((r, i) => `
+                <tr>
+                    <td>${parseInt(offset) + i + 1}</td>
+                    <td>${new Date(r.timestamp).toLocaleTimeString()}</td>
+                    <td>${r.totalSolved || '-'} (E:${r.easySolved} M:${r.mediumSolved} H:${r.hardSolved})</td>
+                    <td>${r.durationMs}ms</td>
+                    <td>
+                        <span class="status-badge ${r.status === 'success' ? 'status-success' : 'status-error'}">
+                            ${r.status}
+                        </span>
+                        ${r.status === 'error' ? `<div style="font-size:0.7rem; color:var(--error-color)">${r.errorMessage}</div>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function addStudent() {
+            const name = document.getElementById('new-student-name').value;
+            if (!name) return;
+
+            const newList = [...students, name];
+            const res = await fetch('/api/batch/students', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newList)
+            });
+            students = await res.json();
+            renderStudents();
+            renderDropdown();
+            document.getElementById('new-student-name').value = "";
+        }
+
+        loadStudents();
+    </script>
+</body>
+
+</html>

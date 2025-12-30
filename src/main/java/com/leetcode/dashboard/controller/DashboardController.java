@@ -25,6 +25,12 @@ public class DashboardController {
         model.addAttribute("username", username);
         return "dashboard";
     }
+
+    @GetMapping("/batch")
+    public String batchPage() {
+        return "batch";
+    }
+
     
     @GetMapping("/api/stats")
     @ResponseBody
